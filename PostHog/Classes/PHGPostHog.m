@@ -1,5 +1,4 @@
 #import <objc/runtime.h>
-#import <UIKit/UIKit.h>
 #import "PHGPostHogUtils.h"
 #import "PHGPostHog.h"
 #import "UIViewController+PHGScreen.h"
@@ -59,33 +58,23 @@ static PHGPostHog *__sharedInstance = nil;
 
         // Pass through for application state change events
         id<PHGApplicationProtocol> application = configuration.application;
-        if (application) {
-            for (NSString *name in @[ UIApplicationDidEnterBackgroundNotification,
-                                      UIApplicationDidFinishLaunchingNotification,
-                                      UIApplicationWillEnterForegroundNotification,
-                                      UIApplicationWillTerminateNotification,
-                                      UIApplicationWillResignActiveNotification,
-                                      UIApplicationDidBecomeActiveNotification ]) {
-                [nc addObserver:self selector:@selector(handleAppStateNotification:) name:name object:application];
-            }
-        }
+//        if (application) {
+//            for (NSString *name in @[ UIApplicationDidEnterBackgroundNotification,
+//                                      UIApplicationDidFinishLaunchingNotification,
+//                                      UIApplicationWillEnterForegroundNotification,
+//                                      UIApplicationWillTerminateNotification,
+//                                      UIApplicationWillResignActiveNotification,
+//                                      UIApplicationDidBecomeActiveNotification ]) {
+//                [nc addObserver:self selector:@selector(handleAppStateNotification:) name:name object:application];
+//            }
+//        }
 
-        if (configuration.recordScreenViews) {
-            [UIViewController phg_swizzleViewDidAppear];
-        }
+//        if (configuration.recordScreenViews) {
+//            [UIViewController phg_swizzleViewDidAppear];
+//        }
         if (configuration.captureInAppPurchases) {
             _storeKitCapturer = [PHGStoreKitCapturer captureTransactionsForPostHog:self];
         }
-
-#if !TARGET_OS_TV
-        if (configuration.capturePushNotifications && configuration.launchOptions) {
-            NSDictionary *remoteNotification = configuration.launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
-            if (remoteNotification) {
-                [self capturePushNotification:remoteNotification fromLaunch:YES];
-            }
-        }
-#endif
-        
         [self reloadFeatureFlags];
     }
     return self;
@@ -108,13 +97,13 @@ NSString *const PHGBuildKeyV2 = @"PHGBuildKeyV2";
     payload.notificationName = note.name;
     [self run:PHGEventTypeApplicationLifecycle payload:payload];
 
-    if ([note.name isEqualToString:UIApplicationDidFinishLaunchingNotification]) {
-        [self _applicationDidFinishLaunchingWithOptions:note.userInfo];
-    } else if ([note.name isEqualToString:UIApplicationWillEnterForegroundNotification]) {
-        [self _applicationWillEnterForeground];
-    } else if ([note.name isEqualToString: UIApplicationDidEnterBackgroundNotification]) {
-      [self _applicationDidEnterBackground];
-    }
+//    if ([note.name isEqualToString:UIApplicationDidFinishLaunchingNotification]) {
+//        [self _applicationDidFinishLaunchingWithOptions:note.userInfo];
+//    } else if ([note.name isEqualToString:UIApplicationWillEnterForegroundNotification]) {
+//        [self _applicationWillEnterForeground];
+//    } else if ([note.name isEqualToString: UIApplicationDidEnterBackgroundNotification]) {
+//      [self _applicationDidEnterBackground];
+//    }
 }
 
 - (void)_applicationDidFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -154,8 +143,8 @@ NSString *const PHGBuildKeyV2 = @"PHGBuildKeyV2";
         @"from_background" : @NO,
         @"version" : currentVersion ?: @"",
         @"build" : currentBuild ?: @"",
-        @"referring_application" : launchOptions[UIApplicationLaunchOptionsSourceApplicationKey] ?: @"",
-        @"url" : launchOptions[UIApplicationLaunchOptionsURLKey] ?: @"",
+        @"referring_application" : @"",
+        @"url" : @"",
     }];
 
 

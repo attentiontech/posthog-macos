@@ -1,4 +1,4 @@
-#import <UIKit/UIKit.h>
+
 #import <objc/runtime.h>
 #import "PHGPostHogUtils.h"
 #import "PHGPostHog.h"
@@ -78,14 +78,14 @@ static NSString *const kPHGAnonymousIdFilename = @"posthog.anonymousId";
     PHGLog(@"Application state change notification: %@", notificationName);
     static NSDictionary *selectorMapping;
     static dispatch_once_t selectorMappingOnce;
-    dispatch_once(&selectorMappingOnce, ^{
-        selectorMapping = @{
-            UIApplicationDidEnterBackgroundNotification :
-                NSStringFromSelector(@selector(applicationDidEnterBackground)),
-            UIApplicationWillTerminateNotification :
-                NSStringFromSelector(@selector(applicationWillTerminate)),
-        };
-    });
+//    dispatch_once(&selectorMappingOnce, ^{
+//        selectorMapping = @{
+//            UIApplicationDidEnterBackgroundNotification :
+//                NSStringFromSelector(@selector(applicationDidEnterBackground)),
+//            UIApplicationWillTerminateNotification :
+//                NSStringFromSelector(@selector(applicationWillTerminate)),
+//        };
+//    });
     SEL selector = NSSelectorFromString(selectorMapping[notificationName]);
     if (selector) {
         [self callWithSelector:selector arguments:nil options:nil];

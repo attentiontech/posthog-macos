@@ -1,14 +1,13 @@
 #import <Foundation/Foundation.h>
+#if !TARGET_OS_OSX
 #import <UIKit/UIKit.h>
+#endif
+#import <SwiftUI/SwiftUI.h>
 
 @protocol PHGApplicationProtocol <NSObject>
-@property (nullable, nonatomic, assign) id<UIApplicationDelegate> delegate;
+@property (nullable, nonatomic, assign) id<NSApplicationDelegate> delegate;
 - (NSUInteger)phg_beginBackgroundTaskWithName:(nullable NSString *)taskName expirationHandler:(void (^__nullable)(void))handler;
 - (void)phg_endBackgroundTask:(NSUInteger)identifier;
-@end
-
-
-@interface UIApplication (PHGApplicationProtocol) <PHGApplicationProtocol>
 @end
 
 typedef NSMutableURLRequest *_Nonnull (^PHGRequestFactory)(NSURL *_Nonnull);
@@ -144,7 +143,7 @@ typedef NSMutableURLRequest *_Nonnull (^PHGRequestFactory)(NSURL *_Nonnull);
 @property (nonatomic, strong, nullable) NSArray<id<PHGMiddleware>> *middlewares;
 
 /**
- * Leave this nil for iOS extensions, otherwise set to UIApplication.sharedApplication.
+ * Leave this nil for iOS extensions, otherwise set to NSApplication.sharedApplication.
  */
 @property (nonatomic, strong, nullable) id<PHGApplicationProtocol> application;
 
