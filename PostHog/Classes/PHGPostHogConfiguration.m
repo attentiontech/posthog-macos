@@ -39,7 +39,7 @@
         self.flushAt = 20;
         self.flushInterval = 30;
         self.maxQueueSize = 1000;
-        self.libraryName = @"posthog-ios";
+        self.libraryName = @"posthog-macos";
         self.libraryVersion = [PHGPostHog version];
         self.payloadFilters = @{
             @"(fb\\d+://authorize#access_token=)([^ ]+)": @"$1((redacted/fb-auth-token))"
